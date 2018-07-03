@@ -1,0 +1,9 @@
+Best parameters found by cross-validation
+XGBoost:
+	Score: 1.4007583467612827
+	Best params: {'learning_rate': 0.05, 'max_depth': 7, 'colsample_bylevel': 0.9, 'n_estimators': 1000, 'subsample': 1, 'objective': 'reg:linear', 'colsample_bytree': 0.55}
+
+Random Forest:
+	Score: 1.4052552282528106
+	Best params: {'n_estimators': 1000, 'max_depth': 15}
+

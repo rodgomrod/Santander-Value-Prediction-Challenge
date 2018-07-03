@@ -1,0 +1,5 @@
+Best parameters found by cross-validation
+Lasso:
+	Score: inf
+	Best params: {'alpha': 10}
+

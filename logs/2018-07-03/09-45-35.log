@@ -1,0 +1,16 @@
+Best parameters found by cross-validation
+LightGBM:
+	Score: 1.4001451109694147
+	Best params: {'boosting': 'gbdt', 'reg_alpha': 1, 'max_depth': 13, 'learning_rate': 0.05, 'metric': 'rmse', 'bagging_fraction': 0.6, 'objective': 'regression', 'reg_lambda': 1.2, 'feature_fraction': 0.7, 'num_leaves': 15}
+
+Lasso:
+	Score: inf
+	Best params: {'alpha': 10}
+
+Ridge:
+	Score: inf
+	Best params: {'alpha': 1}
+
+Stacking:
+	Score: 1.1243994144460525
+
