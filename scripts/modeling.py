@@ -457,19 +457,38 @@ if __name__ == '__main__':
         n_models = len(models)
         model_dict_train = dict()
         model_dict_test = dict()
+        model_dict_TEST = dict()
         print('Creating predictions data-frames')
         for i in range(n_models):
+            print('\tModelo nº {}'.format(i))
             model_dict_train['model_{}'.format(str(i))] = models[i].predict(X_train).tolist()
             model_dict_test['model_{}'.format(str(i))] = models[i].predict(X_test).tolist()
+            preds_test, IDs = model.predictions([models[i]], x_cols, CS=1e5)
+            model_dict_TEST['model_{}'.format(str(i))] = preds_test
         all_preds_train = pd.DataFrame(model_dict_train)
         all_preds_test = pd.DataFrame(model_dict_test)
+        all_preds_TEST = pd.DataFrame(model_dict_TEST)
         meta_lasso = Lasso(random_state=model.RANDOM_STATE)
+        meta_lr = LinearRegression()
         print('Fitting Meta-Lasso')
         meta_lasso.fit(all_preds_train, y_train)
         preds_meta_lasso = meta_lasso.predict(all_preds_test)
         score_meta_lasso = model.rmsle(y_test, preds_meta_lasso)
         print('Score Meta-Lasso= {}\n'.format(score_meta_lasso)) # 0.556649 ????
-        print(preds_meta_lasso)
+        print('Fitting Meta-Linear Regression')
+        meta_lr.fit(all_preds_train, y_train)
+        preds_meta_lr = meta_lr.predict(all_preds_test)
+        score_meta_lr = model.rmsle(y_test, preds_meta_lr)
+        print('Score Meta-Linear Regression= {}\n'.format(score_meta_lr))
+        print('Averagin two meta-models...\n')
+        x, y, score_meta = model.avg_2_models(preds_meta_lasso, preds_meta_lr, y_test)
+        preds_test1 = meta_lasso.predict(all_preds_TEST)
+        preds_test2 = meta_lr.predict(all_preds_TEST)
+        preds_test1_2 = [i * x for i in preds_test1]
+        preds_test2_2 = [i * y for i in preds_test2]
+        preds_test = np.expm1([sum(x) for x in zip(preds_test1_2, preds_test2_2)])
+        model.submit('Avg_meta_lasso_meta_lr', preds_test, IDs, score_meta)
+
 
 
 
